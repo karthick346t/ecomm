@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <main class="mt-5 pt-4">
+    <div class="container dark-grey-text mt-5">
+
+      <!--Grid row-->
+      <div class="row wow fadeIn">
+
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+          <img src="{{ object.image.url }}" class="img-fluid" alt="{{ object.title }}">
+        </div>
+        <!--Grid column-->
+
+        <!--Grid column-->
+        <div class="col-md-6 mb-4">
+          <div class="p-4">
+            <div class="mb-3">
+              <span class="badge purple mr-1">{{ object.get_category_display }}</span>
+            </div>
+
+            <!-- ⭐ Display Average Rating -->
+            <p class="lead">
+              Average Rating: 
+              {% if average_rating > 0 %}
+                <span class="text-warning">⭐ {{ average_rating }}/5</span>
+              {% else %}
+                <span class="text-muted">No ratings yet</span>
+              {% endif %}
+            </p>
+
+            <p class="lead">
+              {% if object.discount_price %}
+                <span class="mr-1">
+                  <del>₹{{ object.price }}</del>
+                </span>
+                <span class="text-success">₹{{ object.discount_price }}</span>
+              {% else %}
+                <span>₹{{ object.price }}</span>
+              {% endif %}
+            </p>
+
+            <p class="lead font-weight-bold">Description</p>
+            <p>{{ object.description }}</p>
+
+            <!-- Add to Cart Buttons -->
+            <a href="{{ object.get_add_to_cart_url }}" class="btn btn-primary btn-md my-0 p">
+              Add to cart <i class="fas fa-shopping-cart ml-1"></i>
+            </a>
+
+            <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-danger btn-md my-0 p">
+              Remove from cart
+            </a>
+
+          </div>
+        </div>
+        <!--Grid column-->
+
+      </div>
+      <!--Grid row-->
+
+      <hr>
+
+      <!-- 📝 Reviews Section -->
+      <h4>Customer Reviews ({{ review_count }})</h4>
+
+      {% if reviews %}
+          <div class="reviews">
+              {% for review in object.reviews.all %}
+                  <div class="card mb-2">
+                      <div class="card-body">
+                          <h5 class="text-primary">{{ review.user.username }} - ⭐{{ review.rating }}</h5>
+                          <p>{{ review.comment }}</p>
+                          <small class="text-muted">{{ review.created_at|date:"F j, Y, g:i a" }}</small>
+                      </div>
+                  </div>
+              {% endfor %}
+          </div>
+      {% else %}
+          <p class="text-muted">No reviews yet. Be the first to review this product!</p>
+      {% endif %}
+
+      <hr>
+
+      <!-- 📝 Leave a Review -->
+      {% if user.is_authenticated %}
+        <h4>Write a Review</h4>
+        <form method="POST" action="{% url 'core:submit-review' object.slug %}">
+          {% csrf_token %}
+          
+          <div class="form-group">
+              <label for="rating">Rating:</label>
+              <select name="rating" id="rating" class="form-control" required>
+                  <option value="5">⭐ 5 - Excellent</option>
+                  <option value="4">⭐ 4 - Very Good</option>
+                  <option value="3">⭐ 3 - Average</option>
+                  <option value="2">⭐ 2 - Poor</option>
+                  <option value="1">⭐ 1 - Terrible</option>
+              </select>
+          </div>
+      
+          <div class="form-group">
+              <label for="comment">Comment:</label>
+              <textarea name="comment" id="comment" rows="3" class="form-control" required></textarea>
+          </div>
+      
+          <button type="submit" class="btn btn-primary">Submit Review</button>
+        </form>
+      {% else %}
+        <p><a href="{% url 'account_login' %}">Login</a> to leave a review.</p>
+      {% endif %}
+
+    </div>
+  </main>
+{% endblock %}
