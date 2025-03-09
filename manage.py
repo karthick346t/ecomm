@@ -2,6 +2,11 @@
 import os
 import sys
 
+import django
+import allauth
+print("Django Version:", django.get_version())
+print("Allauth Version:", allauth.__version__)
+
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'djecommerce.settings.development')
     try:
