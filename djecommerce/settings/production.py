@@ -19,5 +19,8 @@ DATABASES = {
     }
 }
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
+
 STRIPE_PUBLIC_KEY = config('STRIPE_LIVE_PUBLIC_KEY', default='your-default-public-key')
 STRIPE_SECRET_KEY = config('STRIPE_LIVE_SECRET_KEY', default='your-default-secret-key')
