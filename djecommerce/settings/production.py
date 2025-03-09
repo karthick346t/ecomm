@@ -2,6 +2,8 @@ from .base import *
 
 DEBUG = config('DEBUG', cast=bool)
 ALLOWED_HOSTS = ['ecomm-production-8ee1.up.railway.app']
+LOGGING_CONFIG = None
+
 
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
