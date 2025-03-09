@@ -46,7 +46,7 @@ class Item(models.Model):
     category = models.CharField(choices=CATEGORY_CHOICES, max_length=2)
     slug = models.SlugField(unique=True, blank=True)  # ✅ Allow blank slugs initially
     description = models.TextField()
-    image = models.ImageField()
+    image = models.ImageField(upload_to='products/')
 
     def save(self, *args, **kwargs):
         if not self.slug:  # ✅ Generate slug only if it's empty
