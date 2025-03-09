@@ -19,10 +19,12 @@ DATABASES = {
 }
 MIDDLEWARE.insert(1, 'whitenoise.middleware.WhiteNoiseMiddleware')
 
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
 STATIC_URL = "/static/"
-STATICFILES_DIRS = []  # Override to prevent conflicts
+STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_in_env")]
+
+ # Override to prevent conflicts
 
 WHITENOISE_MANIFEST_STRICT = False  # Avoids errors if files are missing
 
