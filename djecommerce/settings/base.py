@@ -77,6 +77,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+
 # Auth
 
 AUTHENTICATION_BACKENDS = (
@@ -101,3 +102,4 @@ EMAIL_HOST_USER = 'vigneshkarthick1811@gmail.com'
 EMAIL_HOST_PASSWORD = 'agxg ngam hcgh eopu'  
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
+WHITENOISE_MANIFEST_STRICT = False

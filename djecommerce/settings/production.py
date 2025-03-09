@@ -22,5 +22,11 @@ DATABASES = {
 STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 STATIC_ROOT = os.path.join(BASE_DIR, "static_root")
 
+STATIC_URL = "/static/"
+WHITENOISE_MANIFEST_STRICT = False  # Avoids WhiteNoise errors if files are missing
+
 STRIPE_PUBLIC_KEY = config('STRIPE_LIVE_PUBLIC_KEY', default='your-default-public-key')
 STRIPE_SECRET_KEY = config('STRIPE_LIVE_SECRET_KEY', default='your-default-secret-key')
+CSRF_TRUSTED_ORIGINS = ["https://ecomm-production-8ee1.up.railway.app"]
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
