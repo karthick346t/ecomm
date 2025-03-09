@@ -83,7 +83,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media_root')
 
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-MEDIAFILES_STORAGE = "whitenoise.storage.CompressedStaticFilesStorage"
 
 # Auth
 
