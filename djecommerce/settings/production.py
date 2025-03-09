@@ -1,6 +1,6 @@
 from .base import *
 
-DEBUG = config('DEBUG', cast=bool)
+DEBUG = config('DEBUG', default=False, cast=bool)
 ALLOWED_HOSTS = ['ecomm-production-8ee1.up.railway.app']
 LOGGING_CONFIG = None
 

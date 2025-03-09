@@ -25,6 +25,7 @@ INSTALLED_APPS = [
     'django_countries',
 
     'core',
+    "crispy_bootstrap4",
 ]
 
 MIDDLEWARE = [
