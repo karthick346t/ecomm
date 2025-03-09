@@ -6,7 +6,7 @@ certifi
 chardet
 defusedxml
 Django
-django-allauth
+django-allauth>=0.60.0
 django-countries
 django-crispy-forms
 django-debug-toolbar
