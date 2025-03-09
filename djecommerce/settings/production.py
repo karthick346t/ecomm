@@ -34,3 +34,4 @@ STRIPE_SECRET_KEY = config('STRIPE_LIVE_SECRET_KEY', default='your-default-secre
 CSRF_TRUSTED_ORIGINS = ["https://ecomm-production-8ee1.up.railway.app"]
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
+WHITENOISE_ALLOW_ALL_ORIGINS = True
