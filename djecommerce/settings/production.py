@@ -10,7 +10,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'}
 ]
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -35,3 +34,6 @@ CSRF_TRUSTED_ORIGINS = ["https://ecomm-production-8ee1.up.railway.app"]
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SECURE = True
 WHITENOISE_ALLOW_ALL_ORIGINS = True
+import mimetypes
+mimetypes.add_type("image/jpeg", ".jpg", True)
+mimetypes.add_type("image/png", ".png", True)
