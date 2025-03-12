@@ -79,7 +79,7 @@ STATICFILES_DIRS = [os.path.join(BASE_DIR, "static_in_env")]
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
-MEDIA_ROOT = "/app/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media_root")
 
 DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
