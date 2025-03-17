@@ -1,115 +1,386 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <main class="mt-5 pt-4">
-    <div class="container dark-grey-text mt-5">
+  <style>
+    :root {
+      --primary-color: #4f46e5; /* Indigo */
+      --primary-light: #e0e7ff;
+      --dark-text: #1f2937;
+      --light-text: #6b7280;
+      --star-color: #fbbf24;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --transition: all 0.3s ease;
+    }
 
-      <!--Grid row-->
-      <div class="row wow fadeIn">
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--dark-text);
+      background-color: #f9fafb;
+    }
 
-        <!--Grid column-->
-        <div class="col-md-6 mb-4">
-          <img src="{{ object.image.url }}" class="img-fluid" alt="{{ object.title }}">
-          <p>DEBUG PATH: {{ item.image.url }}</p>
-        </div>
-        <!--Grid column-->
+    .product-container {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
 
-        <!--Grid column-->
-        <div class="col-md-6 mb-4">
-          <div class="p-4">
-            <div class="mb-3">
-              <span class="badge purple mr-1">{{ object.get_category_display }}</span>
+    .product-image {
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+
+    .product-details {
+      padding: 2rem;
+    }
+
+    .category-badge {
+      display: inline-block;
+      padding: 0.35rem 0.75rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+      margin-bottom: 1rem;
+    }
+
+    .rating-display {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+      font-size: 1rem;
+    }
+
+    .star {
+      color: var(--star-color);
+      margin-right: 0.25rem;
+    }
+
+    .price-display {
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+
+    .original-price {
+      color: #ef4444;
+      text-decoration: line-through;
+      font-size: 1.125rem;
+      margin-right: 0.75rem;
+    }
+
+    .discount-price {
+      color: #10b981;
+    }
+
+    .regular-price {
+      color: var(--dark-text);
+    }
+
+    .description-title {
+      font-weight: 600;
+      font-size: 1.125rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .description-text {
+      color: var(--light-text);
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
+    }
+
+    .cart-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0.625rem 1.25rem;
+      border-radius: 9999px;
+      font-weight: 500;
+      font-size: 0.875rem;
+      transition: var(--transition);
+      margin-right: 0.75rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .add-to-cart {
+      background-color: var(--primary-color);
+      color: white;
+      border: none;
+    }
+
+    .add-to-cart:hover {
+      background-color: #4338ca;
+    }
+
+    .remove-from-cart {
+      background-color: #ef4444;
+      color: white;
+      border: none;
+    }
+
+    .remove-from-cart:hover {
+      background-color: #dc2626;
+    }
+
+    /* Reviews Section */
+    .reviews-section {
+      margin-top: 2rem;
+    }
+
+    .section-title {
+      font-weight: 600;
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      color: var(--dark-text);
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .review-card {
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      background-color: white;
+      border: 1px solid #f3f4f6;
+    }
+
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+    }
+
+    .reviewer-name {
+      font-weight: 500;
+      color: var(--primary-color);
+    }
+
+    .review-rating {
+      display: flex;
+      align-items: center;
+    }
+
+    .review-content {
+      color: var(--light-text);
+      margin-bottom: 0.5rem;
+      line-height: 1.6;
+    }
+
+    .review-date {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    /* Review Form */
+    .review-form-section {
+      margin-top: 2rem;
+      background-color: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+      color: var(--dark-text);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      border-radius: 6px;
+      border: 1px solid #e5e7eb;
+      background-color: #f9fafb;
+      transition: var(--transition);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .form-select {
+      display: block;
+      width: 100%;
+      padding: 0.625rem 0.875rem;
+      font-size: 0.875rem;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      background-color: #f9fafb;
+      transition: var(--transition);
+    }
+
+    .form-select:focus {
+      outline: none;
+      border-color: var(--primary-color);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .submit-button {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 0.625rem 1.25rem;
+      border: none;
+      border-radius: 6px;
+      font-weight: 500;
+      font-size: 0.875rem;
+      cursor: pointer;
+      transition: var(--transition);
+    }
+
+    .submit-button:hover {
+      background-color: #4338ca;
+    }
+
+    .login-link {
+      color: var(--primary-color);
+      text-decoration: none;
+      font-weight: 500;
+      transition: var(--transition);
+    }
+
+    .login-link:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 767.98px) {
+      .product-details {
+        padding: 1rem;
+      }
+    }
+  </style>
+
+  <main class="py-5">
+    <div class="container">
+
+      <div class="product-container">
+        <div class="row g-0">
+          <!-- Product Image -->
+          <div class="col-md-6">
+            <div class="p-4">
+              <img src="{{ object.image.url }}" class="product-image" alt="{{ object.title }}">
             </div>
-
-            <!-- ⭐ Display Average Rating -->
-            <p class="lead">
-              Average Rating: 
-              {% if average_rating > 0 %}
-                <span class="text-warning">⭐ {{ average_rating }}/5</span>
-              {% else %}
-                <span class="text-muted">No ratings yet</span>
-              {% endif %}
-            </p>
-
-            <p class="lead">
-              {% if object.discount_price %}
-                <span class="mr-1">
-                  <del>₹{{ object.price }}</del>
-                </span>
-                <span class="text-success">₹{{ object.discount_price }}</span>
-              {% else %}
-                <span>₹{{ object.price }}</span>
-              {% endif %}
-            </p>
-
-            <p class="lead font-weight-bold">Description</p>
-            <p>{{ object.description }}</p>
-
-            <!-- Add to Cart Buttons -->
-            <a href="{{ object.get_add_to_cart_url }}" class="btn btn-primary btn-md my-0 p">
-              Add to cart <i class="fas fa-shopping-cart ml-1"></i>
-            </a>
-
-            <a href="{{ object.get_remove_from_cart_url }}" class="btn btn-danger btn-md my-0 p">
-              Remove from cart
-            </a>
-
+          </div>
+          
+          <!-- Product Details -->
+          <div class="col-md-6">
+            <div class="product-details">
+              <span class="category-badge">{{ object.get_category_display }}</span>
+              
+              <h1 class="h2 mb-3">{{ object.title }}</h1>
+              
+              <!-- Average Rating -->
+              <div class="rating-display">
+                {% if average_rating > 0 %}
+                  <span class="star">★</span>
+                  <span>{{ average_rating }}/5</span>
+                  <span class="text-muted ms-2">({{ review_count }} reviews)</span>
+                {% else %}
+                  <span class="text-muted">No ratings yet</span>
+                {% endif %}
+              </div>
+              
+              <!-- Price -->
+              <div class="price-display">
+                {% if object.discount_price %}
+                  <span class="original-price">₹{{ object.price }}</span>
+                  <span class="discount-price">₹{{ object.discount_price }}</span>
+                {% else %}
+                  <span class="regular-price">₹{{ object.price }}</span>
+                {% endif %}
+              </div>
+              
+              <!-- Description -->
+              <div class="mb-4">
+                <h2 class="description-title">Description</h2>
+                <p class="description-text">{{ object.description }}</p>
+              </div>
+              
+              <!-- Add to Cart Buttons -->
+              <div>
+                <a href="{{ object.get_add_to_cart_url }}" class="cart-button add-to-cart">
+                  Add to cart <i class="fas fa-shopping-cart ms-1"></i>
+                </a>
+                
+                <a href="{{ object.get_remove_from_cart_url }}" class="cart-button remove-from-cart">
+                  Remove from cart
+                </a>
+              </div>
+            </div>
           </div>
         </div>
-        <!--Grid column-->
-
       </div>
-      <!--Grid row-->
 
-      <hr>
-
-      <!-- 📝 Reviews Section -->
-      <h4>Customer Reviews ({{ review_count }})</h4>
-
-      {% if reviews %}
+      <!-- Reviews Section -->
+      <div class="reviews-section">
+        <h3 class="section-title">Customer Reviews ({{ review_count }})</h3>
+        
+        {% if reviews %}
           <div class="reviews">
-              {% for review in object.reviews.all %}
-                  <div class="card mb-2">
-                      <div class="card-body">
-                          <h5 class="text-primary">{{ review.user.username }} - ⭐{{ review.rating }}</h5>
-                          <p>{{ review.comment }}</p>
-                          <small class="text-muted">{{ review.created_at|date:"F j, Y, g:i a" }}</small>
-                      </div>
-                  </div>
-              {% endfor %}
+            {% for review in object.reviews.all %}
+              <div class="review-card">
+                <div class="review-header">
+                  <span class="reviewer-name">{{ review.user.username }}</span>
+                  <span class="review-rating">
+                    <span class="star">★</span> {{ review.rating }}
+                  </span>
+                </div>
+                <p class="review-content">{{ review.comment }}</p>
+                <small class="review-date">{{ review.created_at|date:"F j, Y, g:i a" }}</small>
+              </div>
+            {% endfor %}
           </div>
-      {% else %}
+        {% else %}
           <p class="text-muted">No reviews yet. Be the first to review this product!</p>
-      {% endif %}
+        {% endif %}
+      </div>
 
-      <hr>
-
-      <!-- 📝 Leave a Review -->
+      <!-- Leave a Review Section -->
       {% if user.is_authenticated %}
-        <h4>Write a Review</h4>
-        <form method="POST" action="{% url 'core:submit-review' object.slug %}">
-          {% csrf_token %}
-          
-          <div class="form-group">
-              <label for="rating">Rating:</label>
-              <select name="rating" id="rating" class="form-control" required>
-                  <option value="5">⭐ 5 - Excellent</option>
-                  <option value="4">⭐ 4 - Very Good</option>
-                  <option value="3">⭐ 3 - Average</option>
-                  <option value="2">⭐ 2 - Poor</option>
-                  <option value="1">⭐ 1 - Terrible</option>
+        <div class="review-form-section">
+          <h3 class="section-title">Write a Review</h3>
+          <form method="POST" action="{% url 'core:submit-review' object.slug %}">
+            {% csrf_token %}
+            
+            <div class="form-group">
+              <label for="rating" class="form-label">Rating:</label>
+              <select name="rating" id="rating" class="form-select" required>
+                <option value="5">★ 5 - Excellent</option>
+                <option value="4">★ 4 - Very Good</option>
+                <option value="3">★ 3 - Average</option>
+                <option value="2">★ 2 - Poor</option>
+                <option value="1">★ 1 - Terrible</option>
               </select>
-          </div>
-      
-          <div class="form-group">
-              <label for="comment">Comment:</label>
+            </div>
+        
+            <div class="form-group">
+              <label for="comment" class="form-label">Comment:</label>
               <textarea name="comment" id="comment" rows="3" class="form-control" required></textarea>
-          </div>
-      
-          <button type="submit" class="btn btn-primary">Submit Review</button>
-        </form>
+            </div>
+        
+            <button type="submit" class="submit-button">Submit Review</button>
+          </form>
+        </div>
       {% else %}
-        <p><a href="{% url 'account_login' %}">Login</a> to leave a review.</p>
+        <div class="review-form-section">
+          <p><a href="{% url 'account_login' %}" class="login-link">Login</a> to leave a review.</p>
+        </div>
       {% endif %}
 
     </div>

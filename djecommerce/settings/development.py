@@ -1,13 +1,14 @@
 from .base import *
 
 DEBUG = True
-ALLOWED_HOSTS = ['127.0.0.1','localhost']
-
+ALLOWED_HOSTS = ['127.0.0.1','localhost','serveo.net','*']
 INSTALLED_APPS += [
     'debug_toolbar'
 ]
 
 MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware', ]
+CSRF_TRUSTED_ORIGINS = ["https://b39c-2401-4900-7b8e-c6cc-5d24-bfe2-5248-73d1.ngrok-free.app"]
+
 
 # DEBUG TOOLBAR SETTINGS
 

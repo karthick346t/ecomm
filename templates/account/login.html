@@ -6,50 +6,122 @@
 {% block head_title %}{% trans "Sign In" %}{% endblock %}
 
 {% block content %}
-  <main>
+<main>
     <div class="container">
-      <section class="mb-4">
-        <div class="row wow fadeIn">
-          <div class='col-6 offset-3'>
-          <h1>{% trans "Sign In" %}</h1>
+        <section class="mb-4">
+            <div class="row wow fadeIn">
+                <div class='col-6 offset-3'>
+                    <div class="card shadow-sm">
+                        <div class="card-body">
+                            <h1 class="text-center">{% trans "Sign In" %}</h1>
 
-          {% get_providers as socialaccount_providers %}
+                            {% get_providers as socialaccount_providers %}
 
-          {% if socialaccount_providers %}
-          <p>{% blocktrans with site.name as site_name %}Please sign in with one
-          of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a>
-          for a {{ site_name }} account and sign in below:{% endblocktrans %}</p>
+                            {% if socialaccount_providers %}
+                            <p class="text-center">
+                                {% blocktrans with site.name as site_name %}Please sign in with one of your existing third party accounts. Or, <a href="{{ signup_url }}">sign up</a> for a {{ site_name }} account and sign in below:{% endblocktrans %}
+                            </p>
 
-          <div class="socialaccount_ballot">
+                            <div class="socialaccount_ballot text-center">
+                                <ul class="socialaccount_providers list-inline">
+                                    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+                                </ul>
+                                <div class="login-or">{% trans 'or' %}</div>
+                            </div>
 
-            <ul class="socialaccount_providers">
-              {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-            </ul>
+                            {% include "socialaccount/snippets/login_extra.html" %}
 
-            <div class="login-or">{% trans 'or' %}</div>
+                            {% else %}
+                            <p class="text-center">{% blocktrans %}If you have not created an account yet, then please <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
+                            {% endif %}
 
-          </div>
-
-          {% include "socialaccount/snippets/login_extra.html" %}
-
-          {% else %}
-          <p>{% blocktrans %}If you have not created an account yet, then please
-          <a href="{{ signup_url }}">sign up</a> first.{% endblocktrans %}</p>
-          {% endif %}
-
-          <form class="login" method="POST" action="{% url 'account_login' %}">
-            {% csrf_token %}
-            {{ form|crispy }}
-            {% if redirect_field_value %}
-            <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
-            {% endif %}
-            <a class="btn btn-default" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
-            <button class="btn btn-primary" type="submit">{% trans "Sign In" %}</button>
-          </form>
-          </div>
-        </div>
-      </section>
+                            <form class="login" method="POST" action="{% url 'account_login' %}">
+                                {% csrf_token %}
+                                {{ form|crispy }}
+                                {% if redirect_field_value %}
+                                <input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+                                {% endif %}
+                                <div class="text-center mt-3">
+                                    <a class="btn btn-link" href="{% url 'account_reset_password' %}">{% trans "Forgot Password?" %}</a>
+                                    <button class="btn btn-primary" type="submit">{% trans "Sign In" %}</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-  </main>
+</main>
+
+<style>
+    body {
+        background-color: #f7f9fc; /* Light background color */
+        font-family: 'Arial', sans-serif; /* Modern font */
+    }
+
+    .container {
+        margin-top: 50px; /* Space from the top */
+    }
+
+    .card {
+        border-radius: 10px; /* Rounded corners for the card */
+        overflow: hidden; /* Prevent overflow */
+    }
+
+    .card-body {
+        padding: 30px; /* Padding inside the card */
+    }
+
+    h1 {
+        font-size: 2.5rem; /* Larger font size for the heading */
+        color: #333; /* Darker text color */
+    }
+
+    .socialaccount_ballot {
+        margin: 20px 0; /* Space around social account options */
+    }
+
+    .socialaccount_providers {
+        padding: 0; /* Remove default padding */
+    }
+
+    .socialaccount_providers li {
+        display: inline; /* Display providers inline */
+        margin: 0 10px; /* Space between providers */
+    }
+
+    .login-or {
+        margin: 20px 0; /* Space around the 'or' text */
+        font-weight: bold; /* Make 'or' bold */
+        color: #666; /* Gray color for 'or' */
+    }
+
+    .btn {
+        margin: 10px 0; /* Space around buttons */
+        border-radius: 25px; /* Rounded button corners */
+        padding: 10px 20px; /* Button padding */
+    }
+
+    .btn-link {
+        color: #007bff; /* Link color */
+        text-decoration: none; /* Remove underline */
+    }
+
+    .btn-link:hover {
+        text-decoration: underline; /* Underline on hover */
+    }
+
+    .btn-primary {
+        background-color: #007bff; /* Primary button color */
+        border-color: #007bff; /* Border color */
+        color: white; /* White text color */
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3; /* Darker on hover */
+        border-color: #0056b3; /* Darker border on hover */
+    }
+</style>
 
 {% endblock %}

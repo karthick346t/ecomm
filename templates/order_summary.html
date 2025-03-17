@@ -1,79 +1,280 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <main>
+  <style>
+    :root {
+      --primary-color: #4f46e5; /* Indigo */
+      --primary-light: #e0e7ff;
+      --danger-color: #ef4444;
+      --success-color: #10b981;
+      --warning-color: #f59e0b;
+      --dark-text: #1f2937;
+      --light-text: #6b7280;
+      --border-color: #e5e7eb;
+      --card-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      color: var(--dark-text);
+      background-color: #f9fafb;
+    }
+
+    .order-container {
+      background-color: white;
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      overflow: hidden;
+      margin-bottom: 2rem;
+      padding: 2rem;
+    }
+
+    .order-title {
+      font-weight: 600;
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      color: var(--dark-text);
+      padding-bottom: 0.75rem;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    /* Table Styling */
+    .table-container {
+      overflow-x: auto;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .modern-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin-bottom: 1.5rem;
+    }
+
+    .modern-table th {
+      background-color: #f9fafb;
+      font-weight: 500;
+      text-align: left;
+      padding: 0.875rem 1rem;
+      color: var(--light-text);
+      font-size: 0.875rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .modern-table td {
+      padding: 1rem;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--dark-text);
+      vertical-align: middle;
+    }
+
+    .modern-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .modern-table tbody tr:hover {
+      background-color: #f9fafb;
+    }
+
+    /* Quantity Controls */
+    .quantity-control {
+      display: flex;
+      align-items: center;
+    }
+
+    .quantity-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 6px;
+      background-color: #f3f4f6;
+      color: var(--dark-text);
+      border: none;
+      transition: var(--transition);
+      text-decoration: none;
+    }
+
+    .quantity-btn:hover {
+      background-color: var(--primary-light);
+      color: var(--primary-color);
+    }
+
+    .quantity-number {
+      margin: 0 0.75rem;
+      font-weight: 500;
+    }
+
+    /* Actions */
+    .remove-item {
+      color: var(--danger-color);
+      opacity: 0.75;
+      transition: var(--transition);
+    }
+
+    .remove-item:hover {
+      opacity: 1;
+    }
+
+    /* Summary rows */
+    .summary-row td {
+      font-weight: 600;
+      background-color: #f9fafb;
+    }
+
+    .coupon-row td {
+      color: var(--success-color);
+    }
+
+    /* Buttons */
+    .btn-container {
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.75rem;
+      margin-top: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.625rem 1.25rem;
+      border-radius: 8px;
+      font-weight: 500;
+      font-size: 0.875rem;
+      transition: var(--transition);
+      text-decoration: none;
+      border: none;
+    }
+
+    .btn-primary {
+      background-color: var(--primary-color);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background-color: #4338ca;
+    }
+
+    .btn-warning {
+      background-color: var(--warning-color);
+      color: white;
+    }
+
+    .btn-warning:hover {
+      background-color: #d97706;
+    }
+
+    /* Empty cart */
+    .empty-cart {
+      text-align: center;
+      padding: 2rem 0;
+      color: var(--light-text);
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 767.98px) {
+      .order-container {
+        padding: 1rem;
+      }
+      
+      .btn-container {
+        flex-direction: column;
+      }
+      
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+    }
+  </style>
+
+  <main class="py-5">
     <div class="container">
-
-    <div class="table-responsive text-nowrap">
-    <h2>Order Summary</h2>
-    <table class="table">
-        <thead>
-        <tr>
-            <th scope="col">#</th>
-            <th scope="col">Item title</th>
-            <th scope="col">Price</th>
-            <th scope="col">Quantity</th>
-            <th scope="col">Total Item Price</th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for order_item in object.items.all %}
-        <tr>
-            <th scope="row">{{ forloop.counter }}</th>
-            <td>{{ order_item.item.title }}</td>
-            <td>{{ order_item.item.discount_price }}</td>
-            <td>
-                <a href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}"><i class="fas fa-minus mr-2"></i></a>
-                {{ order_item.quantity }}
-                <a href="{% url 'core:add-to-cart' order_item.item.slug %}"><i class="fas fa-plus ml-2"></i></a>
-            </td>
-            <td>
-            {% if order_item.item.discount_price %}
-                ₹{{ order_item.get_total_discount_item_price }}
-            {% else %}
-                ₹{{ order_item.get_total_item_price }}
-            {% endif %}
-            <a style='color: red;' href="{% url 'core:remove-from-cart' order_item.item.slug %}">
-                <i class="fas fa-trash float-right"></i>
-            </a>
-            </td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan='5'>Your cart is empty</td>
-        </tr>
-        <tr>
-            <td colspan="5">
-            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
-            </td>
-        </tr>
-        {% endfor %}
-        {% if object.coupon %}
-        <tr>
-            <td colspan="4"><b>Coupon</b></td>
-            <td><b>-₹{{ object.coupon.amount }}</b></td>
-        </tr>
+      <div class="order-container">
+        <h2 class="order-title">Order Summary</h2>
+        
+        <div class="table-container">
+          <table class="modern-table">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th scope="col">Item Title</th>
+                <th scope="col">Price</th>
+                <th scope="col">Quantity</th>
+                <th scope="col">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order_item in object.items.all %}
+              <tr>
+                <td>{{ forloop.counter }}</td>
+                <td>{{ order_item.item.title }}</td>
+                <td>₹{{ order_item.item.discount_price|default:order_item.item.price }}</td>
+                <td>
+                  <div class="quantity-control">
+                    <a href="{% url 'core:remove-single-item-from-cart' order_item.item.slug %}" class="quantity-btn">
+                      <i class="fas fa-minus"></i>
+                    </a>
+                    <span class="quantity-number">{{ order_item.quantity }}</span>
+                    <a href="{% url 'core:add-to-cart' order_item.item.slug %}" class="quantity-btn">
+                      <i class="fas fa-plus"></i>
+                    </a>
+                  </div>
+                </td>
+                <td>
+                  {% if order_item.item.discount_price %}
+                    ₹{{ order_item.get_total_discount_item_price }}
+                  {% else %}
+                    ₹{{ order_item.get_total_item_price }}
+                  {% endif %}
+                  <a href="{% url 'core:remove-from-cart' order_item.item.slug %}" class="remove-item float-right">
+                    <i class="fas fa-trash"></i>
+                  </a>
+                </td>
+              </tr>
+              {% empty %}
+              <tr>
+                <td colspan="5">
+                  <div class="empty-cart">
+                    <p>Your cart is empty</p>
+                  </div>
+                </td>
+              </tr>
+              {% endfor %}
+              
+              {% if object.coupon %}
+              <tr class="coupon-row">
+                <td colspan="4"><b>Coupon Applied</b></td>
+                <td><b>-₹{{ object.coupon.amount }}</b></td>
+              </tr>
+              {% endif %}
+              
+              {% if object.get_total %}
+              <tr class="summary-row">
+                <td colspan="4"><b>Order Total</b></td>
+                <td><b>₹{{ object.get_total }}</b></td>
+              </tr>
+              {% endif %}
+            </tbody>
+          </table>
+        </div>
+        
+        {% if object.items.all %}
+        <div class="btn-container">
+          <a class="btn btn-primary" href="/">Continue Shopping</a>
+          <a class="btn btn-warning" href="/checkout/">Proceed to Checkout</a>
+        </div>
+        {% else %}
+        <div class="btn-container">
+          <a class="btn btn-primary" href="/">Continue Shopping</a>
+        </div>
         {% endif %}
-        {% if object.get_total %}
-        <tr>
-            <td colspan="4"><b>Order Total</b></td>
-            <td><b>₹{{ object.get_total }}</b></td>
-        </tr>
-        <tr>
-            <td colspan="5">
-            <a class='btn btn-warning float-right ml-2' href='/checkout/'>Proceed to checkout</a>
-            <a class='btn btn-primary float-right' href='/'>Continue shopping</a>
-            </td>
-        </tr>
-        {% endif %}
-        </tbody>
-    </table>
-
-    </div>
-
+      </div>
     </div>
   </main>
-
 {% endblock content %}
-
-

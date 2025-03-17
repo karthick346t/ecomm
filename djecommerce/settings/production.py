@@ -1,7 +1,7 @@
 from .base import *
 
 DEBUG = config('DEBUG', default=False, cast=bool)
-ALLOWED_HOSTS = ['ecomm-production-8ee1.up.railway.app']
+ALLOWED_HOSTS = ['ecomm-production-8ee1.up.railway.app','serveo.net']
 LOGGING_CONFIG = None
 
 AUTH_PASSWORD_VALIDATORS = [
